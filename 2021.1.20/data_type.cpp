@@ -166,6 +166,46 @@ int main()
 
 
 
+
+//数据的输入
+    //用于从键盘获取数据
+        //关键字：cin
+
+
+    //整型
+    int a1 = 0;
+    cout << "请输入整型变量：" << endl;
+    cin >> a1;   //cin流入到a中
+    cout << "刚刚输入的数值是：" << a1 << endl;
+    cout << "ASCII中对应的字母是："<<(char)a1 << endl;//强转后输出了字符'a'
+
+    //浮点型
+    float f = 3.14f;//后置f表示他是float类型 否则默认为double类型
+    cout << "请给浮点型变量f赋值：" << endl;
+    cin >> f;
+    cout << "浮点型f = " << f << endl;
+
+    //字符型
+    char ch1 = 'a';
+    cout << "请给字符变量ch1赋值" << endl;
+    cin >> ch1;
+    cout << "字符变量ch = " << ch1 << endl;
+    cout << "字符变量ch的ASCII码值为：" << (int)ch1 << endl;
+    
+    //字符串型
+    string str3 = "hello";
+    cout << "请输入一个字符串：" << endl;
+    cin >> str3;
+    cout << "刚刚输入的字符串为：" << str3 << endl;
+        记得包含头文件 虽然VS2019没有报错
+
+    //布尔类型
+    bool flag1 = false;
+    cout << "请给bool类型的flag1赋值：" << endl;
+    cin >> flag1;
+    cout << "布尔类型flag1 = " << flag1 << endl;
+        //要输入1或0 不能输入true或flase
+        //注意：布尔类型只要输入非0 都表示为真
     system("pause");
     return 0;
 }
