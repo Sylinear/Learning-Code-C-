@@ -179,4 +179,125 @@ using namespace::std;
 最终打印出老师数据以及老师所带的学生数据。
 
 */
+//struct Stu
+//{
+//    string name;
+//    int score;
+//};
+//struct Teacher
+//{
+//    string name;
+//    Stu arr[5];
+//};
+//
+//void GiveTeacher(struct Teacher t_arr[] , int sz)//此处传的是数组(首元素地址) 因此是传址调用 可以修改
+//{
+//    for (int i = 0; i < sz; i++)
+//    {
+//        string nameSeed = "ABCDEFGHIKLMNOPQRSTUVWXZY";
+//        t_arr[i].name = "老师";
+//        t_arr[i].name += nameSeed[i];//在C++中 两个字符串可以直接这样相加 实现strcat的效果
+//
+//        
+//        string sName = "学生";
+//        for (int j = 0; j < 5 ; j++)
+//        {
+//            t_arr[i].arr[j].name = sName + nameSeed[5*i + j];//在C++中 两个字符串可以直接这样相加 实现strcat的效果
+//            t_arr[i].arr[j].score = rand() % 61 + 40;//为了避免分数低于40 因此随机数范围0~60 再+40
+//        }
+//    }
+//}
+//
+//void PrintTeacher(struct Teacher t_arr[], int sz)
+//{
+//    for (int i = 0; i < sz; i++)
+//    {
+//        cout << "\n第" << i+1 << "个老师的信息：" << endl;
+//        cout << "\t老师姓名：" << t_arr[i].name << endl;
+//        for (int j = 0; j < 5; j++)
+//        {
+//            cout << "\t\t第" << j << "个学生的姓名：" << t_arr[i].arr[j].name << "\t分数：" << t_arr[i].arr[j].score << endl;
+//        }
+//    }
+//}
+//int main()
+//{
+//    srand((unsigned int)time(NULL));//随机数种子
+//    Teacher t_arr[3];//老师数组
+//
+//    GiveTeacher(t_arr, (sizeof(t_arr) / sizeof(t_arr[0])));//创建数据
+//    PrintTeacher(t_arr, (sizeof(t_arr) / sizeof(t_arr[0])));//打印数据
+//
+//    return 0;
+//}
 
+
+
+//结构体案例2
+/*
+**案例描述：**
+
+设计一个英雄的结构体，包括成员姓名，年龄，性别;创建结构体数组，数组中存放5名英雄。
+
+通过冒泡排序的算法，将数组中的英雄按照年龄进行升序排序，最终打印排序后的结果。
+
+五名英雄信息如下：
+        {"刘备",23,"男"},
+        {"关羽",22,"男"},
+        {"张飞",20,"男"},
+        {"赵云",21,"男"},
+        {"貂蝉",19,"女"},
+*/
+
+struct hero
+{
+    string name;
+    int age;
+    string gender;
+};
+int main()
+{
+    hero arr[5] =
+    {
+        {"刘备",23,"男"},
+        {"关羽",22,"男"},
+        {"张飞",20,"男"},
+        {"赵云",21,"男"},
+        {"貂蝉",19,"女"},
+    };
+    int sz = sizeof(arr) / sizeof(arr[0]);
+
+    //打印数组确定信息
+    cout << "英雄的信息：" << endl;
+    for (int i = 0; i < sz; i++)
+    {
+        cout << "第" << i + 1 << "个英雄：" << endl;
+        cout << "\t姓名:" << arr[i].name << "\t年龄:" << arr[i].age << "\t性别" << arr[i].gender << endl;
+    }
+
+    for (int i = 0; i < sz - 1; i++)
+    {
+        //一共五个元素 因此至少需要四趟(最后一个元素不用)
+        for (int j = 0; j < sz - 1 - i; j++)
+        {
+            //每一趟 要进行的交换(第一趟 需要比较4次) 后面每一趟 交换次数依次减少一次
+            if (arr[j].age > arr[j + 1].age)
+            {
+                hero temp = arr[j];     //在C++中 可以直接创建结构体变量进行交换 不需一一交换
+                arr[j] = arr[j + 1];
+                arr[j + 1] = temp;
+            }
+        }
+    }
+    cout << "\n-----交换后-----" << endl;
+
+    //打印数组检查
+    cout << "\n英雄的信息：" << endl;
+    for (int i = 0; i < sz; i++)
+    {
+        cout << "第" << i + 1 << "个英雄：" << endl;
+        cout << "\t姓名:" << arr[i].name << "\t年龄:" << arr[i].age << "\t性别" << arr[i].gender << endl;
+    }
+
+    return 0;
+}
