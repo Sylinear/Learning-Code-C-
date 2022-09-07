@@ -1,0 +1,4 @@
+﻿  函数提高.cpp
+C:\Users\Sylinear\Desktop\study\CODE\Learning-Code-C++\2022.5.31\函数提高.cpp(156,6): error C2084: 函数“void func1(int)”已有主体
+C:\Users\Sylinear\Desktop\study\CODE\Learning-Code-C++\2022.5.31\函数提高.cpp(151): message : 参见“func1”的前一个定义
+C:\Users\Sylinear\Desktop\study\CODE\Learning-Code-C++\2022.5.31\函数提高.cpp(193,5): error C2065: “func1”: 未声明的标识符
