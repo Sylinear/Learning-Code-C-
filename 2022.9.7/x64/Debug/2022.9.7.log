@@ -1,0 +1,6 @@
+﻿  Circle.cpp
+  类和对象-封装.cpp
+C:\Users\Sylinear\Desktop\study\CODE\Learning-Code-C++\2022.9.7\类和对象-封装.cpp(376,19): warning C4838: 从“double”转换到“int”需要收缩转换
+C:\Users\Sylinear\Desktop\study\CODE\Learning-Code-C++\2022.9.7\类和对象-封装.cpp(376,19): warning C4244: “初始化”: 从“double”转换到“int”，可能丢失数据
+  正在生成代码...
+  2022.9.7.vcxproj -> C:\Users\Sylinear\Desktop\study\CODE\Learning-Code-C++\2022.9.7\x64\Debug\2022.9.7.exe
