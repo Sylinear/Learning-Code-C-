@@ -578,54 +578,171 @@ using namespace std;
 
 
 //类对象作为类的成员
-class A{};
-class B
-{
-    A a; //类B中含有 对象成员A
-};
-    //问题: 是先构造B 还是先构造A?
+//    从内到外构造 从外到内析构
+//class A{};
+//class B
+//{
+//    A a; //类B中含有 对象成员A
+//};
+//    //问题: 是先构造B 还是先构造A?
+//
+//class Phone //手机类
+//{
+//public:
+//    Phone(string pName)//有参构造
+//    {
+//        m_pName = pName;
+//        cout << "Phone的构造" << endl;
+//    }
+//
+//    ~Phone()
+//    {
+//        cout << "Phone的析构" << endl;
+//    }
+//    string m_pName;
+//};
+//
+//class Person //人类
+//{
+//public:
+//    Person(string name, string pName) :m_Name(name), m_Phone(pName)//使用初始化列表
+//    {                                                   //↑注意此处的语法 并不需要写.m_pName
+//        cout << "Person的构造" << endl;                    //因为此处会调用一次Phone的析构函数 完成赋值
+//    }                                                  //等价于:Phone m_Phone = pName;
+//                                                         //↑隐式转换法 即等同于 Phone m_Phone(pName);
+//    ~Person()
+//    {
+//        cout << "Person的析构" << endl;
+//    }
+//    //姓名
+//    string m_Name;
+//    //手机
+//    Phone m_Phone;
+//};
+//
+//void test01()
+//{
+//    Person p("张三", "苹果MAX");
+//}
+//int main()
+//{
+//    test01();//可以发现实例化对象时 从内向外构造 从外向内析构
+//
+//    return 0;
+//}
 
-class Phone //手机类
+
+
+
+
+
+
+//静态成员
+    //类中的成员变量 或 成员函数 加上关键字static后,称为 静态成员 (静态成员包括变量 和 函数)
+/*
+静态成员变量:
+    1.该类下所有的对象共享同一份数据
+    2.在编译阶段分配内存 (而并非实例化对象时产生 在.exe产生之前就已经分配)
+    3.类内声明,类外初始化  (一定要有一个初始值,初始值在类外给予)
+
+静态成员函数
+    1.所有对象共享同一个函数
+    2.静态成员函数只能访问静态成员变量  (无法访问非静态成员变量)
+*/
+
+//1.静态成员变量
+//class Person
+//{
+//public:
+//
+//    static int m_A; //静态成员变量    -- 所有对象都共享同一份数据  在编译阶段就分配内存
+//
+//    //静态变量也是有作用域的
+//private:
+//    static int m_B; //私有权限下的 一个m_B
+//};
+////类外初始化
+//int Person :: m_A = 100;    
+//// "Person ::"语句 表面这是在Person类作用域下的变量 
+//        // ↑ "::"表示左侧作用域下的变量
+//int Person::m_B = 200;
+//
+//void test01()
+//{
+//    Person p;
+//    cout << p.m_A << endl;//m_A未初始化时 会报错 因为无法完成[链接]操作 需要对m_A类外初始化
+//
+//    Person p2;
+//    p2.m_A = 200;
+//    cout << p.m_A << endl;//修改p2中的m_A 可见p中的m_A也被修改了 说明他们用的是同一份数据
+//}
+//
+////静态成员变量 不属于某个对象 所有对象都共享同一份数据
+//    //因此静态成员变量有两种访问方式:
+//        //1.通过对象进行访问
+//        //2.直接通过[类名]访问
+//void test02()
+//{
+//    //通过对象进行访问
+//    Person p;
+//    cout << p.m_A << endl;
+//
+//    //通过类名直接访问静态变量
+//    cout << Person::m_A << endl; 
+//                //↑  :: 属于Person作用域下的静态变量
+//
+//    cout << Person::m_B << endl;//因为私有权限 m_B无法在类外访问
+//}
+//int main()
+//{
+//    test01();
+//
+//    test02();
+//
+//    return 0;
+//}
+
+//2.静态成员函数
+class Person
 {
 public:
-    Phone(string pName)//有参构造
+    //在函数前加上static后 变成静态成员函数
+    static void func()
     {
-        m_pName = pName;
-        cout << "Phone的构造" << endl;
+        m_A = 100;//静态成员函数 可以访问静态成员变量
+        //m_B = 200;//报错了  因为静态成员函数不可以访问非静态成员变量
+                                //-->这是因为每个实例化对象的m_B都不同 函数并不知道你修改的是哪个对象的m_B
+        cout << "func的调用" << endl;
+    }
+    //静态成员函数同样可以设置访问权限
+private:
+    static void func2()//私有静态成员函数
+    {
+        ;
     }
 
-    ~Phone()
-    {
-        cout << "Phone的析构" << endl;
-    }
-    string m_pName;
-};
-
-class Person //人类
-{
 public:
-    Person(string name, string pName) :m_Name(name), m_Phone(pName)//使用初始化列表
-    {                                                   //↑注意此处的语法 并不需要写.m_pName
-        cout << "Person的构造" << endl;                    //因为此处会调用一次Phone的析构函数 完成赋值
-    }                                                  //等价于:Phone m_Phone = pName;
-                                                         //↑隐式转换法 即等同于 Phone m_Phone(pName);
-    ~Person()
-    {
-        cout << "Person的析构" << endl;
-    }
-    //姓名
-    string m_Name;
-    //手机
-    Phone m_Phone;
+    static int m_A;//静态成员变量
+
+    int m_B;//非静态成员变量
 };
+int Person::m_A = 0; //类外初始化
 
 void test01()
 {
-    Person p("张三", "苹果MAX");
+  //与静态成员变量类似 有两种访问方式
+
+    //1.通过对象访问
+        Person p;
+        p.func();
+
+    //2.通过类名访问
+        Person::func();
+        //Person::func2();//func2为私有作用域下的函数 类外无法访问
 }
+
 int main()
 {
-    test01();//可以发现实例化对象时 从内向外构造 从外向内析构
-
+    test01();
     return 0;
 }
