@@ -142,6 +142,121 @@ using namespace std;
 
 //空指针访问成员函数
 /*
+
 c++中允许空指针调用成员函数 但要注意是否用到this指针 并要保证代码健壮性
 
 */
+//class Person
+//{
+//public:
+//    void showClassName()
+//    {
+//        cout << "this is Person class" << endl;
+//    }
+//
+//    void showPersonAge()
+//    {
+//        //为了避免指针调用 导致非法访问 所以会加一句对this指针的判断
+//        if (NULL == this)
+//        {
+//            return;//若this为空 则直接结束函数
+//        }
+//        cout << "age = " << m_Age << endl;
+//    }
+//
+//    int m_Age;
+//};
+//
+//void test01()
+//{
+//    Person* p = NULL;   //类指针 指向空指针
+//    p->showClassName(); //调用指针内的两个函数 第一个函数正常执行
+//    p->showPersonAge(); //但是在第二个函数时 代码崩了 显示异常"this是nulltpr 读取访问权限冲突
+//                
+//                        //这是因为   cout << "age = " << m_Age << endl;
+//                            //默认等同于               this->m_Age
+//                                //告知编译器 你所调用的成员 是这个实体对象里的成员 
+//                                     //但我们现在没有进行实例化对象 只是一个空指针 因此无法访问
+//}
+//
+//int main()
+//{
+//    test01();//代码崩了
+//
+//
+//    return 0;
+//}
+
+
+
+
+
+
+
+//const修饰的成员函数 [常函数]
+/*
+
+    常函数:
+
+        成员函数被const修饰后 我们称之为 [常函数]
+    
+        常函数内不可以修改成员属性!
+
+        成员属性声明时加关键字mutable后,在常函数中则依然可以修改
+
+
+    常对象:
+
+        声明对象前加const 则变成 [常对象]
+
+        常对象只能调用常函数
+*/
+class Person 
+{
+public:
+    void showPerson0()  //正常函数
+    {
+        m_A = 100;
+    }
+    void showPerson() const  //在括号后 {}之前 加上const 则变成了 [常函数]
+    {
+        m_A = 100;  //常函数中 无法修改普通成员
+        //因此此处等价于 this->m_A = 100; 
+
+            //this指针的本质 是指针常量 -> this指针的指向是不可以修改的
+                //Person* const this;
+            //而一旦在函数的()后 加上const后 就变成了:  const Person* cosnt this;
+                                                // 即 不仅指向不可修改 连指向的值 也不可修改!
+
+        //意味着  在成员函数后加const使其变成[常函数]  本质上const修饰的是this指针 让指针的值也不可修改!
+
+        m_B = 100; //可见 m_B是可以修改的
+    }
+
+    int m_A;
+    mutable int m_B;//特殊变量 即使在常函数中,也可以修改这个值! 关键字: mutable 
+};
+
+void test01()
+{
+    Person p1;
+    p1.showPerson(); //调用函数时 this指针指向该p1
+
+}
+
+void test02()
+{
+    const Person p; //在对象前加const 变为常对象
+    p.m_A = 100;//无法修改 因为是常对象
+    p.m_B = 200;//但这个带mutable变量的关键字可以修改 常函数\常对象均可以修改
+
+    //常对象只能调用常函数
+    p.showPerson0(); //可见 p无法调用普通函数
+    p.showPerson(); //但是常函数 依旧可以调用
+}
+
+int main()
+{
+
+    return 0;
+}
