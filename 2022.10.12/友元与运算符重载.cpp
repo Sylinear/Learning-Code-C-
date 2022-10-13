@@ -420,3 +420,105 @@ public如同客厅,所有客人都可以访问.而private如同卧室,只有自己可以进去.
 //
 //    return 0;
 //}
+
+
+
+
+
+
+
+//递增运算符重载
+/*
+
+    递增运算符:  ++
+
+    注意区分前置++和后置++
+    int a = 10;
+    cout << ++a << endl; //结果会为11
+    cout << a << endl; //结果也是11
+    cout << a++ << endl;//结束是11
+    coout << a << endl;结果为12
+    
+    //因此我们重载递增运算符时,也要写前置递增和后置递增两种.
+*/
+//class MyInteger   //自定义整型变量
+//{
+//
+//    friend ostream& operator<<(ostream& cout, const MyInteger& myint);//左移友元
+//
+//public:
+//    MyInteger()
+//    {
+//        m_Num = 0;//构造初始化为0
+//    }
+//
+//    //重载前置++运算符
+//    MyInteger& operator++()
+//    {
+//        //先++
+//        this->m_Num++;
+//
+//        //后返回
+//        return  *this;//返回值应该是MyInteger类型本身 不能++完cout的类型改变了
+//    }                       //因此函数返回值为 MyInteger&
+//              //*******问题: 此处是否能不返回引用 而是直接返回MyInteger?
+//                    //不能! 因为此处返回的是一个新的对象 会进行一次拷贝构造 修改的不是同一个数据了
+//
+//
+//    //重载后置++运算符
+//       //但是发现编译器认为我们写的是前置++的重载函数 但我们明明返回值不同 -----返回值不能作为重载条件
+//       //那这时候怎么办呢?  ---->  占位参数
+//    MyInteger operator++(int)  //int 为占位参数   可以用于区分前置和后置
+//    {           // operator++(int) [[[[[编译器会默认为后置递增]]]]]]
+//        
+//        //先记录当时结果
+//        MyInteger temp = *this;
+//        
+//        //后递增原本
+//        m_Num++;
+//
+//        //最后将记录结果返回
+//        return temp;
+//    }//注意!!!此处的返回值 是MyInteger 而不是返回引用 因为temp只是一个临时拷贝 等下会被释放
+//            //因此此处必须返回值
+//private:
+//    int m_Num;
+//};
+//void test01()
+//{
+//    MyInteger myint;
+//    cout << myint << endl;//无法输出 因为这个是自定义对象 我们需要先重载左移运算符才可以
+//}
+//
+////重载左移运算符
+//ostream& operator<<(ostream& cout , const MyInteger& myint)//此处第二个参数有所修改
+//{
+//    cout << myint.m_Num << endl;
+//    return cout;
+//}
+//void test02()
+//{
+//    MyInteger myint;
+//    cout << ++myint <<endl;
+//}
+//void test03()
+//{
+//    MyInteger myint;
+//    cout << myint++ << endl;
+//    cout << myint << endl;
+//}
+//int main()
+//{
+//    test01();
+//    test02();
+//    test03();
+//    return 0;
+//}
+
+
+
+
+
+
+
+//赋值运算符重载
