@@ -481,6 +481,7 @@ public如同客厅,所有客人都可以访问.而private如同卧室,只有自己可以进去.
 //        return temp;
 //    }//注意!!!此处的返回值 是MyInteger 而不是返回引用 因为temp只是一个临时拷贝 等下会被释放
 //            //因此此处必须返回值
+//              //这也是为什么 后置++会比前置++更慢
 //private:
 //    int m_Num;
 //};
@@ -522,3 +523,243 @@ public如同客厅,所有客人都可以访问.而private如同卧室,只有自己可以进去.
 
 
 //赋值运算符重载
+/*
+之前说过 C++编译器至少给一个类添加4个默认函数
+    1.默认构造(无参,函数体为空)
+    2.默认析构(无参,函数体为空)
+    3.默认拷贝构造,值拷贝属性(浅拷贝)
+    4.赋值运算符operator=,对属性进行值拷贝(浅拷贝)
+
+    但如果类中有属性指向堆区,赋值操作时也会出现深浅拷贝的问题
+
+*/
+//class Person
+//{
+//public:
+//    Person(int age)//构造
+//    {
+//        m_Age = new int(age); // 变量 = new 类型(数据)  把数据创建在堆区
+//    };
+//
+//    ~Person()
+//    {
+//        if (m_Age != NULL)
+//        {
+//            delete m_Age;   //析构释放堆区空间
+//            m_Age = NULL;
+//        }
+//    }
+//
+//    //重载 赋值运算符
+//    Person& operator=(const Person& p)//+const 不修改原值
+//    {
+//            //编译器提供的赋值运算符是浅拷贝
+//            //m_Age = p.m_Age;
+//
+//        //应该先判断是否有属性在堆区 如果有 先释放干净 然后再深拷贝
+//        if (m_Age != NULL)
+//        {
+//            delete m_Age;
+//            m_Age = NULL;
+//        }
+//        //深拷贝
+//        m_Age = new int(*p.m_Age); //把传入的值作为变量new一块内存 并传给m_Age
+//        return *this;//返回自身
+//    }
+//    int *m_Age;
+//};
+//void test01()
+//{
+//    Person p1(18);//有参构造
+//    cout << "p1的年龄为:" << *p1.m_Age << endl;
+//
+//    Person p2(20);
+//    cout << "p2的年龄为:" << *p2.m_Age << endl;
+//
+//    p2 = p1;//赋值运算
+//    cout << "p1的年龄为:" << *p1.m_Age << endl;
+//    cout << "p2的年龄为:" << *p2.m_Age << endl;
+//    //看着好像没问题 但一旦修改p2
+//
+//    *p2.m_Age = 100;
+//    cout << "p1的年龄为:" << *p1.m_Age << endl;
+//    cout << "p2的年龄为:" << *p2.m_Age << endl;
+//    //使用默认赋值下:
+//        //但是一旦修改p2 发现p1也改变了
+//        //因为他们此时用的是同一块堆区的内存! 系统默认的赋值运算是直接让两者的指针相等了!
+//        //且一旦析构 就会崩溃! 因为同一块内存重复delete
+//                //虽然p1中把地址置空了(地址没有消失 只是指针改为指向NULL);
+//                    //但p2依旧记录了这个已释放过的地址,并不为空,所以会重复释放
+//
+//    //重载赋值运算符:
+//        //运算正常了
+//}
+//
+//void test02()
+//{
+//    //赋值运算符的连等
+//    int a = 10;
+//    int b = 20;
+//    int c = 30;
+//    c = b = a; //结果都是10  赋值运算符是从右到左 
+//    //赋值运算符提供连等 因此我们的赋值运算符也要提供
+//
+//    Person p1(18);
+//    Person p2(28);
+//    Person p3(30);
+//    p1 = p2 = p3;
+//    //只需修改返回值即可 让赋值运算符返回自身
+//
+//        //   p2 = p3   --->   p2.operator(p3);
+//        //   p1  =  p2  = p3  --->  p1.operator( p2.operator(p3); ) 
+//    cout << "p1的年龄为:" << *p1.m_Age << endl;
+//    cout << "p2的年龄为:" << *p2.m_Age << endl;
+//    cout << "p3的年龄为:" << *p2.m_Age << endl;
+//}
+//int main()
+//{
+//    test01();
+//    test02();
+//
+//    return 0;
+//}
+////注意: 深拷贝构造函数 是对于创建一个新的实例化对象时进行的深拷贝 Person p2 = p1;即可
+////      而赋值运算符 则是对已经存在一个一个实例化对象进行的深拷贝 Person p2;  p2 = p1;应用场景不同
+
+
+
+
+
+
+
+//关系运算符重载
+/*
+    关系运算符:  >  <  ==  !=
+    
+    重载让两个自定义类型对象进行对比操作
+
+    譬如含有字符 或者含有在堆区成员的类 此时的比较就需要自己重载
+*/
+//#include<string>
+//class Person
+//{
+//public:
+//    Person(string name,int age)//构造 初始化
+//    {
+//        m_Name = name;
+//        m_Age = age;
+//    }
+//
+//    //重载==
+//    bool operator==(Person& p)
+//    {
+//        return (this->m_Age == p.m_Age && this->m_Name == p.m_Name) ?  true :  false;
+//        //三目运算符
+//
+//        // return (* this == p)   *this == p吗? 是则return 1 否则return 0
+//    }
+//
+//    //重载!=
+//    bool operator!=(Person& p)
+//    {
+//        return (this->m_Age == p.m_Age && this->m_Name == p.m_Name) ? false : true;
+//        // return !(* this == p)   *this == p吗? 是则return 0 否则return 1
+//    }
+//
+//    string m_Name;
+//    int m_Age;
+//};
+//
+//void test01()
+//{
+//    Person p1("Tom", 18);
+//    Person p2("Tom", 19);
+//
+//    if (p1 == p2)  // ---->  p1.operator==(p2);
+//    {
+//        cout << "p1 = p2" << endl;
+//    }
+//    else
+//    {
+//        cout << "p1不等于p2" << endl;
+//    }
+//
+//    if (p1 != p2)  // ---->  p1.operator==(p2);
+//    {
+//        cout << "p1不等于p2" << endl;
+//    }
+//    else
+//    {
+//        cout << "p1等于p2" << endl;
+//    }
+//}
+//int main()
+//{
+//    test01();
+//
+//    return 0;
+//}
+
+
+
+
+
+
+//函数调用运算符重载
+/*
+    函数调用运算符:  () 小括号
+
+    因为重载后使用的方式 非常像函数的调用,因此称为【仿函数】 
+                                以后别人提到仿函数,就知道是重载()
+
+    仿函数没有固定写法,非常灵活
+
+*/
+#include<string>
+class MyPrint
+{
+public:
+    //重载函数调用运算符 ()
+    void operator()(string test)//假如是()打印test
+    {
+        cout << test << endl;
+    }
+    void operator()(int test)//假如是()打印test
+    {
+        cout << "int" << test << endl;
+    }
+};
+void test01()
+{
+    MyPrint myPrint;
+    myPrint("hello wordl"); // 此处是调用了  MyPrint::operator() ( "hello world"); 
+                                //看着会怪怪的 因为myPrint是一个实例化对象 其实此处的运算符是()
+                                      //因为使用起来很像函数调用 所以称为 仿函数 
+    myPrint(10);                            //同样这个运算符函数也是可以重载的
+    
+    //匿名函数对象
+    MyPrint() (20);         //匿名对象调用() 
+}
+class MyAdd
+{
+public:
+    int operator()(int num1, int num2)
+    {
+        return num1 + num2;       //仿函数的定义十分自由 没有固定写法 返回值\参数\函数体都可DIY
+    }
+};
+void test02()
+{
+    MyAdd myadd;
+    myadd(10, 20);
+
+    //匿名函数对象
+    MyAdd()(10,20); //匿名对象调用"()"
+            //匿名对象 在本行构造 本行析构 
+}
+int main()
+{
+    test01();
+    test02();
+    return 0;
+}
